@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "947907829851",
+    "firebase_url": "https://travelguidepak-3541b.firebaseio.com",
+    "project_id": "travelguidepak-3541b",
+    "storage_bucket": "travelguidepak-3541b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947907829851:android:0d86f4af3b754877",
+        "android_client_info": {
+          "package_name": "com.example.zeeshan.travelguidepak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "947907829851-rhsn78v2bvuju08q6213988lm1ndk3h5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zeeshan.travelguidepak",
+            "certificate_hash": "f5e60ed2022d0840d472456b6f135e53321164e2"
+          }
+        },
+        {
+          "client_id": "947907829851-skuu4512l1our8ka79er4qtcae19hlhq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnc67y9WgbaGXua6qqEA1h5nbnQZazXBk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "947907829851-skuu4512l1our8ka79er4qtcae19hlhq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

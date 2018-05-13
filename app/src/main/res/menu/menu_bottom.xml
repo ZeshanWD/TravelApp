@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_info_btn"
+        android:icon="@drawable/baseline_info_black_24dp"
+        android:title="@string/bottom_city_info_text" />
+    <item
+        android:id="@+id/bottom_places_btn"
+        android:icon="@drawable/baseline_place_black_24dp"
+        android:title="@string/bottom_city_places_text" />
+</menu>

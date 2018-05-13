@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">TravelGuidePak</string>
+    <string name="reg_pass_text">Your Password</string>
+    <string name="reg_confirm_pass_text">Confirm Password</string>
+    <string name="reg_btn_text">Create Account</string>
+    <string name="login_reg_btn_text">Need a new Account?</string>
+    <string name="reg_login_text">Alredy have an Account?</string>
+    <string name="setup_name_hint">Your name</string>
+    <string name="setup_btn_name_text">Save Account</string>
+    <string name="action_search_text">Search</string>
+    <string name="action_settings_text">Account Settings</string>
+    <string name="action_logout_text">Logout</string>
+    <string name="action_cities_text">All cities</string>
+    <string name="defualt_image_text">Default Place Iamge</string>
+    <string name="place_title_text">Title</string>
+    <string name="place_description_text">Place Description</string>
+    <string name="new_place_btn_text">Add Place</string>
+    <string name="bottom_city_info_text">Info</string>
+    <string name="bottom_city_places_text">Places</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
