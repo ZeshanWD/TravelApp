@@ -41,6 +41,7 @@ public class CityDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(city.getName());
 
 
+        // Fragments
         infoFragment = new InfoFragment();
         placesFragment = new PlacesFragment();
 
