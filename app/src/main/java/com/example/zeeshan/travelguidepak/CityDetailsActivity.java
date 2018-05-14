@@ -42,8 +42,17 @@ public class CityDetailsActivity extends AppCompatActivity {
 
 
         // Fragments
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("cityName", city.getName());
         infoFragment = new InfoFragment();
+        infoFragment.setArguments(bundle1);
+
+
+        Bundle bundle2 = new Bundle();
+        bundle2.putString("cityName", city.getName());
         placesFragment = new PlacesFragment();
+        placesFragment.setArguments(bundle2);
+
 
         fragmentChanging(infoFragment); // for the default
 
