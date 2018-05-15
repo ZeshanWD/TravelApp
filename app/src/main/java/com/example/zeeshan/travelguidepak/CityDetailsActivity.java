@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class CityDetailsActivity extends AppCompatActivity {
 
     private Toolbar cityToolbar;
@@ -21,6 +23,7 @@ public class CityDetailsActivity extends AppCompatActivity {
 
     private InfoFragment infoFragment;
     private PlacesFragment placesFragment;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,55 +44,52 @@ public class CityDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(city.getName());
 
 
-        // Fragments
-        Bundle bundle1 = new Bundle();
-        bundle1.putString("cityName", city.getName());
-        infoFragment = new InfoFragment();
-        infoFragment.setArguments(bundle1);
+            // Fragments
+            Bundle bundle1 = new Bundle();
+            bundle1.putString("cityName", city.getName());
+            infoFragment = new InfoFragment();
+            infoFragment.setArguments(bundle1);
 
 
-        Bundle bundle2 = new Bundle();
-        bundle2.putString("cityName", city.getName());
-        placesFragment = new PlacesFragment();
-        placesFragment.setArguments(bundle2);
+            Bundle bundle2 = new Bundle();
+            bundle2.putString("cityName", city.getName());
+            placesFragment = new PlacesFragment();
+            placesFragment.setArguments(bundle2);
 
 
-        fragmentChanging(infoFragment); // for the default
+            fragmentChanging(infoFragment); // for the default
 
-        addPlaceButton = findViewById(R.id.add_place_btn);
+            addPlaceButton = findViewById(R.id.add_place_btn);
 
-        addPlaceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent newPlaceIntent = new Intent(CityDetailsActivity.this, AddPlaceActivity.class);
-                newPlaceIntent.putExtra("city", city);
-                startActivity(newPlaceIntent);
-            }
-        });
-
-        cityBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()){
-
-                    case R.id.bottom_info_btn:
-                        fragmentChanging(infoFragment);
-                        return true;
-
-                    case R.id.bottom_places_btn:
-                        fragmentChanging(placesFragment);
-                        return true;
-
-                    default:
-                         return false;
-
+            addPlaceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent newPlaceIntent = new Intent(CityDetailsActivity.this, AddPlaceActivity.class);
+                    newPlaceIntent.putExtra("city", city);
+                    startActivity(newPlaceIntent);
                 }
-            }
-        });
+            });
 
+            cityBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+                    switch (item.getItemId()){
 
+                        case R.id.bottom_info_btn:
+                            fragmentChanging(infoFragment);
+                            return true;
+
+                        case R.id.bottom_places_btn:
+                            fragmentChanging(placesFragment);
+                            return true;
+
+                        default:
+                            return false;
+
+                    }
+                }
+            });
 
     }
 

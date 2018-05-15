@@ -8,11 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -28,6 +33,9 @@ public class PlacesFragment extends Fragment {
     private RecyclerView placesRecycler;
     private FirebaseFirestore firebaseFirestore;
     private PlacesAdapter placesAdapter;
+    private FirebaseAuth mAuth;
+
+    private DocumentSnapshot lastVisible;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -35,12 +43,11 @@ public class PlacesFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Get the Bundle
-        String cityName = getArguments().getString("cityName");
-
+        final String cityName = getArguments().getString("cityName");
 
 
         View view = inflater.inflate(R.layout.fragment_places, container, false);
@@ -54,31 +61,87 @@ public class PlacesFragment extends Fragment {
         placesRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         placesRecycler.setAdapter(placesAdapter);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-        //firebaseFirestore.collection("Places").whereEqualTo("city",'Lahore').
+        if(mAuth.getCurrentUser() != null){
+            firebaseFirestore = FirebaseFirestore.getInstance();
+
+            placesRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    Boolean llegadoFinal = !recyclerView.canScrollVertically(1);
+
+                    if(llegadoFinal){
+                        String desc = lastVisible.getString("description");
+                        Toast.makeText(container.getContext(), "Final reached", Toast.LENGTH_LONG).show();
+
+                        refetch(cityName);
+                    }
+
+                }
+            });
+
+
+            // Query consulta = placesRef.orderBy("timestamp", Query.Direction.DESCENDING);
+            // whereEqualTo("city", cityName)
+            Query consulta = firebaseFirestore.collection("Places").whereEqualTo("city", cityName).limit(2);
+
+            consulta.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                // Get the last visible document
+
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                    if (!documentSnapshots.isEmpty()) {
+                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() -1);
+                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
+                            if(doc.getType() == DocumentChange.Type.ADDED){
+                                Place place = doc.getDocument().toObject(Place.class);
+                                listaSitios.add(place);
+
+                                placesAdapter.notifyDataSetChanged();
+
+                            }
+                        }
+
+                    }
+
+                }
+            });
+        }
 
 
 
-        firebaseFirestore.collection("Places").whereEqualTo("city", cityName).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    public void refetch(String name){
+        Query nextQuery = firebaseFirestore.collection("Places").whereEqualTo("city", name)
+                .startAfter(lastVisible)
+                .limit(2);
+
+        nextQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
-                for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
-                    if(doc.getType() == DocumentChange.Type.ADDED){
-                        Place place = doc.getDocument().toObject(Place.class);
-                        listaSitios.add(place);
+                if(!documentSnapshots.isEmpty()){
+                    lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
+                            if(doc.getType() == DocumentChange.Type.ADDED){
+                                Place place = doc.getDocument().toObject(Place.class);
+                                listaSitios.add(place);
 
-                        placesAdapter.notifyDataSetChanged();
+                                placesAdapter.notifyDataSetChanged();
 
-                    }
+                            }
+                        }
                 }
 
             }
         });
-
-        // Inflate the layout for this fragment
-        return view;
     }
 
 }

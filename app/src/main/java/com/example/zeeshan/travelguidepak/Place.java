@@ -1,20 +1,33 @@
 package com.example.zeeshan.travelguidepak;
 
+import java.util.Date;
 
 public class Place {
     private String city, description, image, thumbnai, title, userId;
+    private Date timestamp;
+
 
     public Place(){
 
     }
 
-    public Place(String city, String description, String image, String thumbnai, String title, String userId) {
+    public Place(String city, String description, String image, String thumbnai, String title, String userId, Date timestamp) {
         this.city = city;
         this.description = description;
         this.image = image;
         this.thumbnai = thumbnai;
         this.title = title;
         this.userId = userId;
+        this.timestamp = timestamp;
+    }
+
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getCity() {
