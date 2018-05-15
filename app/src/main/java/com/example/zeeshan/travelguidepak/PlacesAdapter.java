@@ -112,7 +112,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             placeImage = mView.findViewById(R.id.place_image);
 
             RequestOptions placeholderOptions = new RequestOptions();
-            placeholderOptions.placeholder(R.mipmap.default_image);
+            placeholderOptions.placeholder(R.drawable.defaultplaceimage);
 
             Glide.with(context).applyDefaultRequestOptions(placeholderOptions).load(imageUrl).into(placeImage);
         }
