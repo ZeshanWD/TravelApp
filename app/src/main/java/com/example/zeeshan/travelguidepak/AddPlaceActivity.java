@@ -90,6 +90,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CropImage.activity()
                         .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(2,1)
                         .start(AddPlaceActivity.this);
             }
         });
@@ -117,9 +118,9 @@ public class AddPlaceActivity extends AppCompatActivity {
                                 File newPlaceImage = new File(placeImageUri.getPath());
                                 try {
                                     compressedImageFile = new Compressor(AddPlaceActivity.this)
-                                            .setMaxHeight(200)
-                                            .setMaxWidth(200)
-                                            .setQuality(1)
+                                            //.setMaxHeight(200)
+                                           // .setMaxWidth(200)
+                                            //.setQuality(1)
                                             .compressToBitmap(newPlaceImage);
 
                                 } catch (IOException e) {

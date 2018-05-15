@@ -10,34 +10,35 @@
         android:id="@+id/add_place_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"></android.support.v7.widget.Toolbar>
 
     <ImageView
         android:id="@+id/new_place_image"
-        android:layout_width="386dp"
-        android:layout_height="216dp"
-        android:contentDescription="@string/defualt_image_text"
-        android:src="@drawable/defaultplaceimage"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_place_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/add_place_toolbar"
+        app:srcCompat="@drawable/defaultplaceimage" />
 
     <EditText
         android:id="@+id/new_place_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/place_title_text"
-        android:inputType="text"
+        android:inputType="textMultiLine"
+        android:maxLength="125"
         android:padding="16dp"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_place_image" />
 
@@ -45,7 +46,11 @@
         android:id="@+id/new_place_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/place_description_text"
         android:inputType="textMultiLine"
@@ -81,11 +86,11 @@
         android:id="@+id/newPlaceProgress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
-        android:layout_height="12dp"
+        android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_place_toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/new_place_image" />
 
 </android.support.constraint.ConstraintLayout>

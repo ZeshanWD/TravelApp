@@ -88,7 +88,7 @@ public class PlacesFragment extends Fragment {
             // whereEqualTo("city", cityName)
             Query consulta = firebaseFirestore.collection("Places").whereEqualTo("city", cityName).limit(2);
 
-            consulta.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            consulta.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 // Get the last visible document
 
                 @Override
@@ -123,7 +123,7 @@ public class PlacesFragment extends Fragment {
                 .startAfter(lastVisible)
                 .limit(2);
 
-        nextQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
