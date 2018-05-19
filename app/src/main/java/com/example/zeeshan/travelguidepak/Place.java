@@ -2,7 +2,7 @@ package com.example.zeeshan.travelguidepak;
 
 import java.util.Date;
 
-public class Place {
+public class Place extends PlaceId {
     private String city, description, image, thumbnai, title, userId;
     private Date timestamp;
 

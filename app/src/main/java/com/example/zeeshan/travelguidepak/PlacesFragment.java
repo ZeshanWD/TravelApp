@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,9 @@ public class PlacesFragment extends Fragment {
     private FirebaseAuth mAuth;
 
     private DocumentSnapshot lastVisible;
+    private Boolean firstPageLoaded = true;
+    private ImageView likeBtn;
+    private TextView likeBtnCounter;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -86,7 +93,7 @@ public class PlacesFragment extends Fragment {
 
             // Query consulta = placesRef.orderBy("timestamp", Query.Direction.DESCENDING);
             // whereEqualTo("city", cityName)
-            Query consulta = firebaseFirestore.collection("Places").whereEqualTo("city", cityName).limit(2);
+            Query consulta = firebaseFirestore.collection("Places").whereEqualTo("city", cityName).limit(3);
 
             consulta.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 // Get the last visible document
@@ -94,17 +101,31 @@ public class PlacesFragment extends Fragment {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
-                    if (!documentSnapshots.isEmpty()) {
+                    if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
+                    if(firstPageLoaded){
                         lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() -1);
-                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
-                            if(doc.getType() == DocumentChange.Type.ADDED){
-                                Place place = doc.getDocument().toObject(Place.class);
+                    }
+
+                    for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
+                        if(doc.getType() == DocumentChange.Type.ADDED){
+
+                            String placeId = doc.getDocument().getId();
+
+                            Place place = doc.getDocument().toObject(Place.class).withId(placeId);
+
+                            if(firstPageLoaded){
                                 listaSitios.add(place);
-
-                                placesAdapter.notifyDataSetChanged();
-
+                            } else {
+                                // Pondra los nuevos sitios al principio.
+                                listaSitios.add(0, place);
                             }
+
+                            placesAdapter.notifyDataSetChanged();
+
                         }
+                    }
+
+                    firstPageLoaded = false;
 
                     }
 
@@ -131,7 +152,8 @@ public class PlacesFragment extends Fragment {
                     lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
                         for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
                             if(doc.getType() == DocumentChange.Type.ADDED){
-                                Place place = doc.getDocument().toObject(Place.class);
+                                String placeId = doc.getDocument().getId();
+                                Place place = doc.getDocument().toObject(Place.class).withId(placeId);
                                 listaSitios.add(place);
 
                                 placesAdapter.notifyDataSetChanged();

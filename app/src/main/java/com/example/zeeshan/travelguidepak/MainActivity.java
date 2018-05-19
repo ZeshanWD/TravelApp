@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mainToolbar;
     private FirebaseAuth mAuth;
     private List<City> cityList;
-    private CitiesAdapter adapter;
-    private ListView cityListView;
+    private CitiesRecyclerAdapter recyclerAdapter;
     private FirebaseFirestore firebaseFirestore;
     private String currentUserId;
+    private RecyclerView recyclerView;
 
 
 
@@ -47,28 +49,19 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mainToolbar);
 
-        getSupportActionBar().setTitle("Popular Destinations");
+        getSupportActionBar().setTitle("Top Destinations");
 
         cityList = new ArrayList<City>();
         cityList = getAllCities();
 
-        cityListView = (ListView) findViewById(R.id.list);
+        recyclerView = findViewById(R.id.cityRecycler);
 
-        adapter = new CitiesAdapter(this, R.layout.list_item, cityList);
-        cityListView.setAdapter(adapter);
+        recyclerAdapter = new CitiesRecyclerAdapter(cityList);
 
-        // the Click Listener
-        cityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-                City citySelected = cityList.get(position);
-                Intent detailsIntent = new Intent(MainActivity.this, CityDetailsActivity.class);
-                detailsIntent.putExtra("city", citySelected);
-                startActivity(detailsIntent);
 
-            }
-        });
     }
 
     protected void onStart() {
