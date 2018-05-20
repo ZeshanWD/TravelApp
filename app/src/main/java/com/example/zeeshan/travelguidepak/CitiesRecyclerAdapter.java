@@ -43,7 +43,7 @@ public class CitiesRecyclerAdapter extends RecyclerView.Adapter<CitiesRecyclerAd
         String nameData = lista.get(position).getName();
         holder.setName(nameData);
 
-        int image = lista.get(position).getImage();
+        String image = lista.get(position).getImage();
         holder.setImage(image);
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +82,7 @@ public class CitiesRecyclerAdapter extends RecyclerView.Adapter<CitiesRecyclerAd
             nameView.setText(name);
         }
 
-        private void setImage(int imageUrl){
+        private void setImage(String imageUrl){
             imageView = mView.findViewById(R.id.city_image);
             Glide.with(context).load(imageUrl).into(imageView);
         }

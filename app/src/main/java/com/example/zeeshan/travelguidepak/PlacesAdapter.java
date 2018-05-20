@@ -101,7 +101,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if(!documentSnapshots.isEmpty()){
-
                     int numero = documentSnapshots.size();
                     holder.setLikesCount(numero);
 

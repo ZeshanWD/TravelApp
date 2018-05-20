@@ -4,11 +4,15 @@ import java.io.Serializable;
 
 public class City implements Serializable {
     private String name;
-    private int image;
+    private String image;
 
-    public City(String name, int image) {
-        this.name = name;
+    public City(){
+
+    }
+
+    public City(String image, String name) {
         this.image = image;
+        this.name = name;
     }
 
     public String getName() {
@@ -19,11 +23,11 @@ public class City implements Serializable {
         this.name = name;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

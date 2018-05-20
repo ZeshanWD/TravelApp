@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -43,6 +44,7 @@ public class PlacesFragment extends Fragment {
     private Boolean firstPageLoaded = true;
     private ImageView likeBtn;
     private TextView likeBtnCounter;
+    private ListenerRegistration getPlaces;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -65,7 +67,7 @@ public class PlacesFragment extends Fragment {
 
         placesAdapter = new PlacesAdapter(listaSitios);
 
-        placesRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        placesRecycler.setLayoutManager(new LinearLayoutManager(container.getContext()));
         placesRecycler.setAdapter(placesAdapter);
 
         mAuth = FirebaseAuth.getInstance();
@@ -95,7 +97,7 @@ public class PlacesFragment extends Fragment {
             // whereEqualTo("city", cityName)
             Query consulta = firebaseFirestore.collection("Places").whereEqualTo("city", cityName).limit(3);
 
-            consulta.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+             consulta.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 // Get the last visible document
 
                 @Override
@@ -139,10 +141,16 @@ public class PlacesFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
+
     public void refetch(String name){
         Query nextQuery = firebaseFirestore.collection("Places").whereEqualTo("city", name)
                 .startAfter(lastVisible)
-                .limit(2);
+                .limit(3);
 
         nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
             @Override

@@ -11,16 +11,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private String currentUserId;
     private RecyclerView recyclerView;
-
 
 
     @Override
@@ -52,15 +54,40 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Top Destinations");
 
         cityList = new ArrayList<City>();
-        cityList = getAllCities();
 
         recyclerView = findViewById(R.id.cityRecycler);
-
         recyclerAdapter = new CitiesRecyclerAdapter(cityList);
 
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        if(mAuth.getCurrentUser() != null){
+
+            firebaseFirestore.collection("Cities").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+                // Get the last visible document
+
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                    if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
+
+                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
+
+                            if(doc.getType() == DocumentChange.Type.ADDED){
+
+                                City city = doc.getDocument().toObject(City.class);
+                                cityList.add(city);
+
+                                recyclerAdapter.notifyDataSetChanged();
+
+                            }
+                        }
+
+                    }
+
+                }
+            });
+        }
 
     }
 
@@ -72,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             sendToLogin();
         } else { // si esta logueado, miramos si ha rellenado su informacion.
             currentUserId = mAuth.getCurrentUser().getUid();
-            firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if(task.isSuccessful()){
@@ -87,25 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private List<City> getAllCities(){
-        City lahore = new City("Lahore", R.drawable.lahore);
-        City islamabad = new City("Islamabad", R.drawable.islamabad);
-        City karachi = new City("Karachi", R.drawable.karachi);
-        City multan = new City("Multan", R.drawable.multan);
-        City peshawar = new City("Peshawar", R.drawable.peshawar);
-        City rawalpindi = new City("Rawalpindi", R.drawable.rawalpindi);
-        List<City> lista = new ArrayList<City>();
-
-        lista.add(lahore);
-        lista.add(islamabad);
-        lista.add(karachi);
-        lista.add(multan);
-        lista.add(peshawar);
-        lista.add(rawalpindi);
-
-        return lista;
     }
 
 

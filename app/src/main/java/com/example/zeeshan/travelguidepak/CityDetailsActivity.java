@@ -46,7 +46,7 @@ public class CityDetailsActivity extends AppCompatActivity {
 
             // Fragments
             Bundle bundle1 = new Bundle();
-            bundle1.putString("cityName", city.getName());
+            bundle1.putSerializable("city", city);
             infoFragment = new InfoFragment();
             infoFragment.setArguments(bundle1);
 

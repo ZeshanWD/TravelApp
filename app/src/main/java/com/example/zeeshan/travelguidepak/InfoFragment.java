@@ -6,6 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 
 /**
@@ -13,6 +17,12 @@ import android.view.ViewGroup;
  */
 public class InfoFragment extends Fragment {
 
+
+    private ImageView cityImage;
+    private TextView cityName;
+    private TextView cityDesc;
+
+    private City city;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -23,7 +33,27 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_info, container, false);
+
+        cityImage = (ImageView) view.findViewById(R.id.info_city_image);
+        cityName = (TextView) view.findViewById(R.id.info_city_name);
+        cityDesc = (TextView) view.findViewById(R.id.info_city_desc);
+
+        // Get the Bundle
+        if(getArguments() != null){
+            city = (City) getArguments().getSerializable("city");
+        }
+
+        // display Info
+
+        Glide.with(container.getContext()).load(city.getImage()).into(cityImage);
+
+        cityName.setText(city.getName());
+
+
+
+
+         return view;
     }
 
 }
