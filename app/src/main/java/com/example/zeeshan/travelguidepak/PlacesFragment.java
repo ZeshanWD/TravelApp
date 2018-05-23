@@ -65,12 +65,13 @@ public class PlacesFragment extends Fragment {
 
         placesRecycler = view.findViewById(R.id.places_recycler_view);
 
+        mAuth = FirebaseAuth.getInstance();
+
         placesAdapter = new PlacesAdapter(listaSitios);
 
         placesRecycler.setLayoutManager(new LinearLayoutManager(container.getContext()));
         placesRecycler.setAdapter(placesAdapter);
 
-        mAuth = FirebaseAuth.getInstance();
 
         if(mAuth.getCurrentUser() != null){
             firebaseFirestore = FirebaseFirestore.getInstance();
@@ -97,37 +98,37 @@ public class PlacesFragment extends Fragment {
             // whereEqualTo("city", cityName)
             Query consulta = firebaseFirestore.collection("Places").whereEqualTo("city", cityName).limit(3);
 
-             consulta.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+            consulta.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 // Get the last visible document
 
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
                     if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
-                    if(firstPageLoaded){
-                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() -1);
-                    }
-
-                    for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
-                        if(doc.getType() == DocumentChange.Type.ADDED){
-
-                            String placeId = doc.getDocument().getId();
-
-                            Place place = doc.getDocument().toObject(Place.class).withId(placeId);
-
-                            if(firstPageLoaded){
-                                listaSitios.add(place);
-                            } else {
-                                // Pondra los nuevos sitios al principio.
-                                listaSitios.add(0, place);
-                            }
-
-                            placesAdapter.notifyDataSetChanged();
-
+                        if(firstPageLoaded){
+                            lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() -1);
                         }
-                    }
 
-                    firstPageLoaded = false;
+                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
+                            if(doc.getType() == DocumentChange.Type.ADDED){
+
+                                String placeId = doc.getDocument().getId();
+
+                                Place place = doc.getDocument().toObject(Place.class).withId(placeId);
+
+                                if(firstPageLoaded){
+                                    listaSitios.add(place);
+                                } else {
+                                    // Pondra los nuevos sitios al principio.
+                                    listaSitios.add(0, place);
+                                }
+
+                                placesAdapter.notifyDataSetChanged();
+
+                            }
+                        }
+
+                        firstPageLoaded = false;
 
                     }
 
@@ -158,16 +159,16 @@ public class PlacesFragment extends Fragment {
 
                 if(!documentSnapshots.isEmpty()){
                     lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
-                            if(doc.getType() == DocumentChange.Type.ADDED){
-                                String placeId = doc.getDocument().getId();
-                                Place place = doc.getDocument().toObject(Place.class).withId(placeId);
-                                listaSitios.add(place);
+                    for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
+                        if(doc.getType() == DocumentChange.Type.ADDED){
+                            String placeId = doc.getDocument().getId();
+                            Place place = doc.getDocument().toObject(Place.class).withId(placeId);
+                            listaSitios.add(place);
 
-                                placesAdapter.notifyDataSetChanged();
+                            placesAdapter.notifyDataSetChanged();
 
-                            }
                         }
+                    }
                 }
 
             }

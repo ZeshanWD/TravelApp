@@ -1,6 +1,7 @@
 package com.example.zeeshan.travelguidepak;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -35,10 +37,11 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     private Context context;
     private FirebaseFirestore firebaseFirestore;
     private User user;
+    private FirebaseAuth mAuth;
     private TextView placeDate;
     private TextView placeUsername;
     private CircleImageView placeUserImage;
-    private FirebaseAuth mAuth;
+    private ImageView placeCommentBtn;
 
     public PlacesAdapter(List<Place> listaSitios){
         this.lista = listaSitios;
@@ -90,11 +93,17 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
 
 
+        try {
+
+            long milSec = lista.get(position).getTimestamp().getTime();
+            String date = DateFormat.format("MM/dd/yyyy", new Date(milSec)).toString();
+            holder.setDate(date);
+
+        }catch (Exception e){
+            Toast.makeText(context, "Got ERROR ON DATE : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
 
-        long milSec = lista.get(position).getTimestamp().getTime();
-        String date = DateFormat.format("MM/dd/yyyy", new Date(milSec)).toString();
-        holder.setDate(date);
 
         // Contar los Likes
         firebaseFirestore.collection("Places").document(PlaceId).collection("Likes").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -151,6 +160,15 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             }
         });
 
+        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PlaceCommentsActivity.class);
+                intent.putExtra("placeId", PlaceId);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
 
@@ -168,6 +186,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         private TextView username;
         private ImageView likeBtn;
         private TextView likeBtnCount;
+        private ImageView commentBtn;
 
 
         public ViewHolder(View itemView) {
@@ -175,6 +194,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             mView = itemView;
 
             likeBtn = mView.findViewById(R.id.like_btn);
+            commentBtn = mView.findViewById(R.id.comment_img_btn);
         }
 
         private void setDesc(String desc){

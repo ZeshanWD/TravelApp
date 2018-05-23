@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,13 +25,23 @@
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".RegisterActivity" android:screenOrientation="portrait" />
-        <activity android:name=".SetupActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SetupActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".CityDetailsActivity" android:screenOrientation="portrait" />
-        <activity android:name=".AddPlaceActivity" android:parentActivityName=".CityDetailsActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".CityDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddPlaceActivity"
+            android:parentActivityName=".CityDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".PlaceCommentsActivity"></activity>
     </application>
 
 </manifest>

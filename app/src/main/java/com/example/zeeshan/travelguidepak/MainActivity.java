@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mAuth.getCurrentUser() != null){
 
-            firebaseFirestore.collection("Cities").addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            firebaseFirestore.collection("Cities").addSnapshotListener(MainActivity.this, new EventListener<QuerySnapshot>() {
                 // Get the last visible document
 
                 @Override
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             sendToLogin();
         } else { // si esta logueado, miramos si ha rellenado su informacion.
             currentUserId = mAuth.getCurrentUser().getUid();
-            firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if(task.isSuccessful()){
