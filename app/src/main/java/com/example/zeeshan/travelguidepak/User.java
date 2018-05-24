@@ -1,14 +1,14 @@
 package com.example.zeeshan.travelguidepak;
 
 public class User {
-    private String name, imageUrl;
+    private String name, image;
 
     public User(){
 
     }
-    public User(String name, String imageUrl) {
+    public User(String name, String image) {
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.image = image;
     }
 
     public String getName() {
@@ -19,11 +19,11 @@ public class User {
         this.name = name;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

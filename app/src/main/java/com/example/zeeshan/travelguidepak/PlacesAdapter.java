@@ -34,25 +34,29 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder> {
 
     private List<Place> lista;
+    private List<User> userList;
     private Context context;
-    private FirebaseFirestore firebaseFirestore;
+
     private User user;
-    private FirebaseAuth mAuth;
     private TextView placeDate;
     private TextView placeUsername;
     private CircleImageView placeUserImage;
-    private ImageView placeCommentBtn;
 
-    public PlacesAdapter(List<Place> listaSitios){
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth mAuth;
+
+    public PlacesAdapter(List<Place> listaSitios, List<User> userList){
         this.lista = listaSitios;
+        this.userList = userList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.place_list_item, parent, false);
         context = parent.getContext();
-        mAuth = FirebaseAuth.getInstance();
+
         firebaseFirestore = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         return new ViewHolder(view);
     }
 
@@ -60,11 +64,15 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         holder.setIsRecyclable(false);
+
+
+        final String PlaceId = lista.get(position).PlaceId;
+        final String currentUserId = mAuth.getCurrentUser().getUid();
+
+
         String descData = lista.get(position).getDescription();
         holder.setDesc(descData);
 
-        final String currentUserId = mAuth.getCurrentUser().getUid();
-        final String PlaceId = lista.get(position).PlaceId;
 
         String imageUrl = lista.get(position).getImage();
         String thumbnail = lista.get(position).getThumbnai();
@@ -72,25 +80,12 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
         String userId = lista.get(position).getUserId();
 
-        // User Query
-        firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
 
-                    String username = task.getResult().getString("name");
-                    String image = task.getResult().getString("image");
+        // Cogemos la informacion del userList para que no haya que hacer otro Query.
+        String username = userList.get(position).getName();
+        String image = userList.get(position).getImage();
 
-                    holder.setUserData(username, image);
-
-                } else {
-
-                    // Error Handling
-
-                }
-            }
-        });
-
+        holder.setUserData(username, image);
 
 
         try {
@@ -109,12 +104,12 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         firebaseFirestore.collection("Places").document(PlaceId).collection("Likes").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                if(!documentSnapshots.isEmpty()){
+                if(documentSnapshots.isEmpty()){
+                    holder.setLikesCount(0);
+                } else {
                     int numero = documentSnapshots.size();
                     holder.setLikesCount(numero);
 
-                } else {
-                    holder.setLikesCount(0);
                 }
             }
         });
