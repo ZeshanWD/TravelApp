@@ -108,6 +108,10 @@ public class PlacesFragment extends Fragment {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
+                    if(e != null){
+                        return;
+                    }
+
                     if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
                         if(firstPageLoaded){
                             lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() -1);
@@ -177,6 +181,10 @@ public class PlacesFragment extends Fragment {
             nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                    if(e != null){
+                        return;
+                    }
 
                     if(!documentSnapshots.isEmpty()){
 

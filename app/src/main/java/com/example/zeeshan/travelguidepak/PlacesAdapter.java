@@ -2,6 +2,7 @@ package com.example.zeeshan.travelguidepak;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -101,9 +102,14 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
 
         // Contar los Likes
-        firebaseFirestore.collection("Places").document(PlaceId).collection("Likes").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection("Places/" + PlaceId + "/Likes").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                if(e != null){
+                    return;
+                }
+
                 if(documentSnapshots.isEmpty()){
                     holder.setLikesCount(0);
                 } else {
@@ -117,14 +123,22 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
 
         // Miramos los likes
-        firebaseFirestore.collection("Places").document(PlaceId).collection("Likes").document(currentUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        firebaseFirestore.collection("Places/" + PlaceId + "/Likes").document(currentUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
 
+                if(e != null){
+                    return;
+                }
+
                 if(documentSnapshot.exists()){
-                    holder.likeBtn.setImageDrawable(context.getDrawable(R.mipmap.liked_btn));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        holder.likeBtn.setImageDrawable(context.getDrawable(R.mipmap.liked_btn));
+                    }
                 } else {
-                    holder.likeBtn.setImageDrawable(context.getDrawable(R.mipmap.like_btn));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        holder.likeBtn.setImageDrawable(context.getDrawable(R.mipmap.like_btn));
+                    }
                 }
 
             }

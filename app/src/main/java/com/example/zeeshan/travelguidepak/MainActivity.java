@@ -1,8 +1,14 @@
 package com.example.zeeshan.travelguidepak;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,52 +51,73 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+            firebaseFirestore = FirebaseFirestore.getInstance();
 
-        mainToolbar = findViewById(R.id.main_toolbar);
+            mainToolbar = findViewById(R.id.main_toolbar);
 
-        setSupportActionBar(mainToolbar);
+            setSupportActionBar(mainToolbar);
 
-        getSupportActionBar().setTitle("Top Destinations");
+            getSupportActionBar().setTitle("Top Destinations");
 
-        cityList = new ArrayList<City>();
+            cityList = new ArrayList<City>();
 
-        recyclerView = findViewById(R.id.cityRecycler);
-        recyclerAdapter = new CitiesRecyclerAdapter(cityList);
+            recyclerView = findViewById(R.id.cityRecycler);
+            recyclerAdapter = new CitiesRecyclerAdapter(cityList);
 
-        recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(recyclerAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        if(mAuth.getCurrentUser() != null){
+            if (mAuth.getCurrentUser() != null) {
 
-            firebaseFirestore.collection("Cities").addSnapshotListener(MainActivity.this, new EventListener<QuerySnapshot>() {
-                // Get the last visible document
+                firebaseFirestore.collection("Cities").addSnapshotListener(MainActivity.this, new EventListener<QuerySnapshot>() {
+                    // Get the last visible document
 
-                @Override
-                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
-                    if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
+                        if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
 
-                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
+                            for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
 
-                            if(doc.getType() == DocumentChange.Type.ADDED){
+                                if (doc.getType() == DocumentChange.Type.ADDED) {
 
-                                City city = doc.getDocument().toObject(City.class);
-                                cityList.add(city);
+                                    City city = doc.getDocument().toObject(City.class);
+                                    cityList.add(city);
 
-                                recyclerAdapter.notifyDataSetChanged();
+                                    recyclerAdapter.notifyDataSetChanged();
 
+                                }
                             }
+
                         }
 
                     }
-
-                }
-            });
-        }
+                });
+            }
 
     }
+
+
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Internet Connection Available");
+        builder.setMessage("Please connect to internet to use this application");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+            }
+        });
+        builder.setCancelable(false);
+
+        return builder;
+    }
+
 
     protected void onStart() {
         super.onStart();
@@ -116,6 +144,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isConnected(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        if(networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            else return false;
+        } else {
+            return false;
+        }
+    }
+
 
 
     private void sendToLogin(){
@@ -123,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish(); // para que el usuario no vuelva atras.
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
