@@ -47,7 +47,6 @@ public class PlacesFragment extends Fragment {
     private Boolean firstPageLoaded = true;
     //private ImageView likeBtn;
     //private TextView likeBtnCounter;
-    private List<User> userList;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -65,12 +64,11 @@ public class PlacesFragment extends Fragment {
 
 
         listaSitios = new ArrayList<>();
-        userList = new ArrayList<>();
         placesRecycler = view.findViewById(R.id.places_recycler_view);
 
         mAuth = FirebaseAuth.getInstance();
 
-        placesAdapter = new PlacesAdapter(listaSitios,userList);
+        placesAdapter = new PlacesAdapter(listaSitios);
 
         placesRecycler.setLayoutManager(new LinearLayoutManager(container.getContext()));
         placesRecycler.setAdapter(placesAdapter);
@@ -116,7 +114,6 @@ public class PlacesFragment extends Fragment {
                         if(firstPageLoaded){
                             lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() -1);
                             listaSitios.clear();
-                            userList.clear();
                         }
 
                         for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
@@ -124,29 +121,17 @@ public class PlacesFragment extends Fragment {
 
                                 String placeId = doc.getDocument().getId();
 
-                                final Place place = doc.getDocument().toObject(Place.class).withId(placeId);
 
-                                String placeUserId = doc.getDocument().getString("userId");
-                                firebaseFirestore.collection("Users").document(placeUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if(task.isSuccessful()){
-                                            User user = task.getResult().toObject(User.class);
+                                Place place = doc.getDocument().toObject(Place.class).withId(placeId);
 
-                                            if(firstPageLoaded){
-                                                userList.add(user);
-                                                listaSitios.add(place);
-                                            } else {
-                                                // Pondra los nuevos sitios al principio.
-                                                userList.add(0, user);
-                                                listaSitios.add(0, place);
-                                            }
-                                            placesAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-                                });
+                               if(firstPageLoaded){
+                                    listaSitios.add(place);
+                                } else {
+                                    // Pondra los nuevos sitios al principio.
+                                   listaSitios.add(0, place);
+                               }
 
-
+                                placesAdapter.notifyDataSetChanged();
                             }
                         }
 
@@ -187,38 +172,24 @@ public class PlacesFragment extends Fragment {
                     }
 
                     if(!documentSnapshots.isEmpty()){
-
                         lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                            for(DocumentChange doc: documentSnapshots.getDocumentChanges()) {
+                                if (doc.getType() == DocumentChange.Type.ADDED) {
+                                    String placeId = doc.getDocument().getId();
+                                    Place place = doc.getDocument().toObject(Place.class).withId(placeId);
+                                    listaSitios.add(place);
 
-                        for(DocumentChange doc: documentSnapshots.getDocumentChanges()){
-                            if(doc.getType() == DocumentChange.Type.ADDED){
-
-                                String placeId = doc.getDocument().getId();
-                                final Place place = doc.getDocument().toObject(Place.class).withId(placeId);
-                                String placeUserId = doc.getDocument().getString("userId");
-
-                                firebaseFirestore.collection("Users").document(placeUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if(task.isSuccessful()){
-                                            User user = task.getResult().toObject(User.class);
-
-                                            userList.add(user);
-                                            listaSitios.add(place);
-
-                                            placesAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-                                });
-
+                                }
                             }
-                        }
+
+                        placesAdapter.notifyDataSetChanged();
+
                     }
 
-                }
-            });
+            }
+
+        });
+
         }
-
     }
-
 }

@@ -26,61 +26,28 @@
             android:layout_width="386dp"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/place_userimage"
-                android:layout_width="68dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:src="@mipmap/ic_launcher_round"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/place_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="16dp"
-                android:text="Username"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/place_userimage"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/created_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="4dp"
-                android:text="Place Date"
-                app:layout_constraintStart_toEndOf="@+id/place_userimage"
-                app:layout_constraintTop_toBottomOf="@+id/place_username" />
-
             <ImageView
                 android:id="@+id/city_image"
                 android:layout_width="372dp"
-                android:layout_height="156dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="217dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/place_userimage"
-                app:srcCompat="@drawable/gradiend" />
+                app:srcCompat="@drawable/gradiend"
+                tools:layout_editor_absoluteY="-1dp" />
 
             <TextView
                 android:id="@+id/place_desc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="293dp"
+                android:layout_height="59dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:lines="3"
+                android:padding="8dp"
                 android:text="Description of the place"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.046"

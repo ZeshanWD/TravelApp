@@ -35,20 +35,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder> {
 
     private List<Place> lista;
-    private List<User> userList;
     private Context context;
-
-    private User user;
-    private TextView placeDate;
-    private TextView placeUsername;
-    private CircleImageView placeUserImage;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth mAuth;
 
-    public PlacesAdapter(List<Place> listaSitios, List<User> userList){
+    public PlacesAdapter(List<Place> listaSitios){
         this.lista = listaSitios;
-        this.userList = userList;
     }
 
     @Override
@@ -80,25 +73,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         holder.setImage(imageUrl, thumbnail);
 
         String userId = lista.get(position).getUserId();
-
-
-        // Cogemos la informacion del userList para que no haya que hacer otro Query.
-        String username = userList.get(position).getName();
-        String image = userList.get(position).getImage();
-
-        holder.setUserData(username, image);
-
-
-        try {
-
-            long milSec = lista.get(position).getTimestamp().getTime();
-            String date = DateFormat.format("MM/dd/yyyy", new Date(milSec)).toString();
-            holder.setDate(date);
-
-        }catch (Exception e){
-            Toast.makeText(context, "Got ERROR ON DATE : " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
 
 
         // Contar los Likes
@@ -220,32 +194,10 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             Glide.with(context).applyDefaultRequestOptions(placeholderOptions).load(imageUrl).thumbnail(Glide.with(context).load(thumbnail)).into(placeImage);
         }
 
-        private void setUsername(String name){
-            username = mView.findViewById(R.id.place_username);
-            username.setText(name);
-        }
-
-        private void setDate(String date){
-            placeDate = mView.findViewById(R.id.created_date);
-            placeDate.setText(date);
-
-        }
-
         public void setLikesCount(int count){
             likeBtnCount = mView.findViewById(R.id.like_counter);
             likeBtnCount.setText(count + " Likes");
         }
 
-        private void setUserData(String name, String image){
-            placeUsername = mView.findViewById(R.id.place_username);
-            placeUserImage = mView.findViewById(R.id.place_userimage);
-            placeUsername.setText(name);
-
-            // para al cargar no se descuadre la imagen.
-            RequestOptions placeholderOptions = new RequestOptions();
-            placeholderOptions.placeholder(R.mipmap.ic_launcher_round);
-
-            Glide.with(context).applyDefaultRequestOptions(placeholderOptions).load(image).into(placeUserImage);
-        }
     }
 }
