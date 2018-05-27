@@ -1,5 +1,6 @@
 package com.example.zeeshan.travelguidepak;
 
+import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class CityDetailsActivity extends AppCompatActivity {
@@ -23,7 +27,13 @@ public class CityDetailsActivity extends AppCompatActivity {
 
     private InfoFragment infoFragment;
     private PlacesFragment placesFragment;
+    private MapFragment mapFragment;
     private FirebaseAuth mAuth;
+
+
+    private static final String TAG = "MainActivity";
+    private static final int ERROR_DIALOG_REQUEST = 101;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +61,17 @@ public class CityDetailsActivity extends AppCompatActivity {
             infoFragment.setArguments(bundle1);
 
 
+
             Bundle bundle2 = new Bundle();
             bundle2.putString("cityName", city.getName());
             placesFragment = new PlacesFragment();
             placesFragment.setArguments(bundle2);
+
+
+            Bundle bundle3 = new Bundle();
+            bundle3.putSerializable("city", city);
+            mapFragment = new MapFragment();
+            mapFragment.setArguments(bundle3);
 
 
             fragmentChanging(infoFragment); // for the default
@@ -84,6 +101,12 @@ public class CityDetailsActivity extends AppCompatActivity {
                             fragmentChanging(placesFragment);
                             return true;
 
+                        case R.id.bottom_map_btn:
+                            if(isServicesAvailable()){
+                                fragmentChanging(mapFragment);
+                            }
+                            return true;
+
                         default:
                             return false;
 
@@ -92,6 +115,22 @@ public class CityDetailsActivity extends AppCompatActivity {
             });
 
     }
+
+    public boolean isServicesAvailable(){
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(CityDetailsActivity.this);
+        if(available == ConnectionResult.SUCCESS){
+            Toast.makeText(CityDetailsActivity.this, "User can load map", Toast.LENGTH_LONG).show();
+            return true;
+        } else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            // error can be resolved(some version error)
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(CityDetailsActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        } else {
+            Toast.makeText(CityDetailsActivity.this, "User can't load Map", Toast.LENGTH_LONG).show();
+        }
+        return false;
+    }
+
 
     // Forma de Cambiar los fragmentos, unos por otros.
     private void fragmentChanging(Fragment fragment){

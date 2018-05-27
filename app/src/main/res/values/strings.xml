@@ -18,6 +18,9 @@
     <string name="bottom_city_info_text">Info</string>
     <string name="bottom_city_places_text">Places</string>
 
+    <string name="GOOGLE_API_KEY">AIzaSyCDHyNBwsMnWadx_PafxGdVdTjvtXhUxPA</string>
+    <string name="bottom_map_text">Map</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
