@@ -69,7 +69,7 @@ public class CityDetailsActivity extends AppCompatActivity {
 
 
             Bundle bundle3 = new Bundle();
-            bundle3.putSerializable("city", city);
+            bundle3.putSerializable("cityName", city.getName());
             mapFragment = new MapFragment();
             mapFragment.setArguments(bundle3);
 

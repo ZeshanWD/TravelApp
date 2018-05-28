@@ -20,7 +20,6 @@ public class InfoFragment extends Fragment {
 
 
     private ImageView cityImage;
-    private TextView cityName;
     private TextView cityDesc;
 
     private City city;
@@ -37,7 +36,6 @@ public class InfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         cityImage = (ImageView) view.findViewById(R.id.info_city_image);
-        cityName = (TextView) view.findViewById(R.id.info_city_name);
         cityDesc = (TextView) view.findViewById(R.id.info_city_desc);
 
         // Get the Bundle
@@ -49,9 +47,7 @@ public class InfoFragment extends Fragment {
 
         Glide.with(container.getContext()).load(city.getImage()).into(cityImage);
 
-        cityName.setText(city.getName());
-
-
+        cityDesc.setText(city.getDescription());
 
 
          return view;

@@ -5,13 +5,10 @@ import java.util.Date;
 public class Place extends PlaceId {
     private String city, description, image, thumbnai, title, userId;
     private Date timestamp;
+    private Double latitude, longitude;
 
 
-    public Place(){
-
-    }
-
-    public Place(String city, String description, String image, String thumbnai, String title, String userId, Date timestamp) {
+    public Place(String city, String description, String image, String thumbnai, String title, String userId, Date timestamp, Double latitude, Double longitude) {
         this.city = city;
         this.description = description;
         this.image = image;
@@ -19,8 +16,30 @@ public class Place extends PlaceId {
         this.title = title;
         this.userId = userId;
         this.timestamp = timestamp;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
+    public Place(){
+
+
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 
     public Date getTimestamp() {
         return timestamp;

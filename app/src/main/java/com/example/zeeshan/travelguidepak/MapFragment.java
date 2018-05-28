@@ -20,6 +20,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
@@ -34,6 +40,8 @@ public class MapFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 3;
 
     private Boolean mLocationPermissionGranted = false;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore firebaseFirestore;
 
     private GoogleMap googleMap;
     private MapView mapView;
@@ -53,6 +61,10 @@ public class MapFragment extends Fragment {
         // comprueba los permisos
         getLocationPermissions();
 
+        mAuth = FirebaseAuth.getInstance();
+
+        final String cityName = getArguments().getString("cityName");
+
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
 
@@ -65,13 +77,48 @@ public class MapFragment extends Fragment {
 
                     Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_LONG).show();
 
-                    // For dropping a marker at a point on the Map
-                    LatLng sydney = new LatLng(-34, 151);
-                    googleMap.addMarker(new MarkerOptions().position(sydney).title("Sydney City").snippet("This is Description of Sydney"));
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+
+                if (mAuth.getCurrentUser() != null) {
+                        firebaseFirestore = FirebaseFirestore.getInstance();
+
+                        firebaseFirestore.collection("Places").whereEqualTo("city", cityName).addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+                            // Get the last visible document
+
+                            @Override
+                            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                                if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
+
+                                    for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+
+                                        if (doc.getType() == DocumentChange.Type.ADDED) {
+
+                                            Place place = doc.getDocument().toObject(Place.class);
+                                            if(place.getLatitude() != null && place.getLongitude() != null){
+
+                                                LatLng latLngPlace = new LatLng(place.getLatitude(), place.getLongitude());
+                                                googleMap.addMarker(new MarkerOptions().position(latLngPlace).title(place.getTitle()));
+
+                                            }
+
+                                        }
+                                    }
+
+                                }
+
+                            }
+                        });
+                    }
+
+
+                    LatLng latLahore = new LatLng(31.529236, 74.293597);
 
                     // For zooming automatically to the location of the marker
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(latLahore).zoom(12).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
             }
         });
 
