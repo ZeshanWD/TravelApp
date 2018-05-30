@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravelGuidePak</string>
+    <string name="app_name">Travel Guide - Pakistan</string>
     <string name="reg_pass_text">Your Password</string>
     <string name="reg_confirm_pass_text">Confirm Password</string>
     <string name="reg_btn_text">Create Account</string>
@@ -21,6 +21,4 @@
     <string name="GOOGLE_API_KEY">AIzaSyCDHyNBwsMnWadx_PafxGdVdTjvtXhUxPA</string>
     <string name="bottom_map_text">Map</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

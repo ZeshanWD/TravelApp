@@ -14,21 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:background="@color/colorPrimary" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_place_btn"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_margin="12dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="false"
-        android:src="@mipmap/btn_add"
-        app:backgroundTint="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/cityBottomNavbar"
-        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/cityBottomNavbar"

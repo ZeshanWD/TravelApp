@@ -21,6 +21,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class PlaceCommentsActivity extends AppCompatActivity {
 
 
         //
-        firebaseFirestore.collection("Places/" + placeId + "/Comments").addSnapshotListener(PlaceCommentsActivity.this, new EventListener<QuerySnapshot>() {
+        firebaseFirestore.collection("Places/" + placeId + "/Comments").orderBy("timestamp", Query.Direction.ASCENDING) .addSnapshotListener(PlaceCommentsActivity.this, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.

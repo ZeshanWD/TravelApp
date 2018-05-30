@@ -76,7 +76,7 @@ public class CityDetailsActivity extends AppCompatActivity {
 
             fragmentChanging(infoFragment); // for the default
 
-            addPlaceButton = findViewById(R.id.add_place_btn);
+            /*addPlaceButton = findViewById(R.id.add_place_btn);
 
             addPlaceButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,7 +85,23 @@ public class CityDetailsActivity extends AppCompatActivity {
                     newPlaceIntent.putExtra("city", city);
                     startActivity(newPlaceIntent);
                 }
-            });
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/add_place_btn"
+                    android:layout_width="66dp"
+                    android:layout_height="66dp"
+                    android:layout_margin="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="40dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:src="@mipmap/btn_add"
+                    app:backgroundTint="@color/colorAccent"
+                    app:layout_constraintBottom_toTopOf="@+id/cityBottomNavbar"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            });*/
 
             cityBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override

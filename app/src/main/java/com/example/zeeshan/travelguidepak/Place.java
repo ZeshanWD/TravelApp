@@ -1,8 +1,9 @@
 package com.example.zeeshan.travelguidepak;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Place extends PlaceId {
+public class Place extends PlaceId implements Serializable {
     private String city, description, image, thumbnai, title, userId;
     private Date timestamp;
     private Double latitude, longitude;

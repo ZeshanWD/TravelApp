@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="69" />
+                                                <entry key="scalingPercent" value="87" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -57,10 +57,12 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundLayerName" value="background" />
-                                      <entry key="foregroundAssetType" value="CLIP_ART" />
-                                      <entry key="foregroundLayerName" value="btn_add" />
-                                      <entry key="outputName" value="action_add_btn" />
+                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="backgroundLayerName" value="background_app_icon" />
+                                      <entry key="foregroundImage" value="C:\Users\zeeshan\Desktop\pakistan (2).png" />
+                                      <entry key="foregroundLayerName" value="app_icon" />
+                                      <entry key="legacyIconShape" value="CIRCLE" />
+                                      <entry key="outputName" value="ic_app_icon" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -104,11 +106,6 @@
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>

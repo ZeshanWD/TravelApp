@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         holder.setIsRecyclable(false);
 
@@ -152,6 +153,15 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
             }
         });
 
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent singlePlaceIntent = new Intent(context, PlaceActivity.class);
+                singlePlaceIntent.putExtra("place", lista.get(position));
+                context.startActivity(singlePlaceIntent);
+            }
+        });
+
     }
 
 
@@ -170,6 +180,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         private ImageView likeBtn;
         private TextView likeBtnCount;
         private ImageView commentBtn;
+        private ConstraintLayout parentLayout;
 
 
         public ViewHolder(View itemView) {
@@ -178,6 +189,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
             likeBtn = mView.findViewById(R.id.like_btn);
             commentBtn = mView.findViewById(R.id.comment_img_btn);
+            parentLayout = itemView.findViewById(R.id.parentPlaceLayout);
         }
 
         private void setDesc(String desc){
