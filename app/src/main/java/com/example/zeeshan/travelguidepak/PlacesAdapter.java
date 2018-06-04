@@ -140,7 +140,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
                     }
                 });
 
-
             }
         });
 
@@ -176,7 +175,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         private View mView;
         private TextView descView;
         private ImageView placeImage;
-        private TextView username;
         private ImageView likeBtn;
         private TextView likeBtnCount;
         private ImageView commentBtn;

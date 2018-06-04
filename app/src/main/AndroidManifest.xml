@@ -48,10 +48,6 @@
         <activity
             android:name=".CityDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".AddPlaceActivity"
-            android:parentActivityName=".CityDetailsActivity"
-            android:screenOrientation="portrait" />
         <activity android:name=".PlaceCommentsActivity" />
         <activity android:name=".PlaceActivity"></activity>
     </application>

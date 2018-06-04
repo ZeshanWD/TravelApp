@@ -1,6 +1,7 @@
 package com.example.zeeshan.travelguidepak;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -45,8 +46,6 @@ public class PlacesFragment extends Fragment {
 
     private DocumentSnapshot lastVisible;
     private Boolean firstPageLoaded = true;
-    //private ImageView likeBtn;
-    //private TextView likeBtnCounter;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -86,9 +85,6 @@ public class PlacesFragment extends Fragment {
                     Boolean llegadoFinal = !recyclerView.canScrollVertically(1);
 
                     if(llegadoFinal){
-                        String desc = lastVisible.getString("description");
-                        //Toast.makeText(container.getContext(), "Final reached", Toast.LENGTH_LONG).show();
-
                         refetch(cityName);
                     }
 
@@ -96,8 +92,6 @@ public class PlacesFragment extends Fragment {
             });
 
 
-            // Query consulta = placesRef.orderBy("timestamp", Query.Direction.DESCENDING);
-            // whereEqualTo("city", cityName)
             Query consulta = firebaseFirestore.collection("Places").whereEqualTo("city", cityName).limit(3);
 
             consulta.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
@@ -107,7 +101,7 @@ public class PlacesFragment extends Fragment {
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
                     if(e != null){
-                        return;
+                        sendToLogin();
                     }
 
                     if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
@@ -155,6 +149,11 @@ public class PlacesFragment extends Fragment {
 
     }
 
+    private void sendToLogin(){
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+    }
+
     public void refetch(String name){
 
         if(mAuth.getCurrentUser() != null){
@@ -168,7 +167,7 @@ public class PlacesFragment extends Fragment {
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
                     if(e != null){
-                        return;
+                        sendToLogin();
                     }
 
                     if(!documentSnapshots.isEmpty()){

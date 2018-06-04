@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class CityDetailsActivity extends AppCompatActivity {
 
     private Toolbar cityToolbar;
-    private FloatingActionButton addPlaceButton;
     private City city;
     private BottomNavigationView cityBottomNav;
 
@@ -69,39 +68,12 @@ public class CityDetailsActivity extends AppCompatActivity {
 
 
             Bundle bundle3 = new Bundle();
-            bundle3.putSerializable("cityName", city.getName());
+            bundle3.putSerializable("city", city);
             mapFragment = new MapFragment();
             mapFragment.setArguments(bundle3);
 
 
             fragmentChanging(infoFragment); // for the default
-
-            /*addPlaceButton = findViewById(R.id.add_place_btn);
-
-            addPlaceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent newPlaceIntent = new Intent(CityDetailsActivity.this, AddPlaceActivity.class);
-                    newPlaceIntent.putExtra("city", city);
-                    startActivity(newPlaceIntent);
-                }
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/add_place_btn"
-                    android:layout_width="66dp"
-                    android:layout_height="66dp"
-                    android:layout_margin="12dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="40dp"
-                    android:layout_marginRight="40dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="false"
-                    android:src="@mipmap/btn_add"
-                    app:backgroundTint="@color/colorAccent"
-                    app:layout_constraintBottom_toTopOf="@+id/cityBottomNavbar"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            });*/
 
             cityBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -135,14 +107,12 @@ public class CityDetailsActivity extends AppCompatActivity {
     public boolean isServicesAvailable(){
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(CityDetailsActivity.this);
         if(available == ConnectionResult.SUCCESS){
-            Toast.makeText(CityDetailsActivity.this, "User can load map", Toast.LENGTH_LONG).show();
             return true;
         } else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             // error can be resolved(some version error)
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(CityDetailsActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
         } else {
-            Toast.makeText(CityDetailsActivity.this, "User can't load Map", Toast.LENGTH_LONG).show();
         }
         return false;
     }

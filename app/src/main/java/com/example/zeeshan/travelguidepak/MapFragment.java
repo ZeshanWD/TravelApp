@@ -1,6 +1,7 @@
 package com.example.zeeshan.travelguidepak;
 
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.Manifest;
@@ -63,7 +64,7 @@ public class MapFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        final String cityName = getArguments().getString("cityName");
+        final City city = (City) getArguments().getSerializable("city");
 
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -75,7 +76,7 @@ public class MapFragment extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                     googleMap = mMap;
 
-                    Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Map ready", Toast.LENGTH_LONG).show();
 
                     googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
@@ -83,11 +84,15 @@ public class MapFragment extends Fragment {
                 if (mAuth.getCurrentUser() != null) {
                         firebaseFirestore = FirebaseFirestore.getInstance();
 
-                        firebaseFirestore.collection("Places").whereEqualTo("city", cityName).addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+                        firebaseFirestore.collection("Places").whereEqualTo("city", city.getName()).addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                             // Get the last visible document
 
                             @Override
                             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                                if(e != null){
+                                    sendToLogin();
+                                }
 
                                 if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
 
@@ -113,10 +118,10 @@ public class MapFragment extends Fragment {
                     }
 
 
-                    LatLng latLahore = new LatLng(31.529236, 74.293597);
+                    LatLng cityLatLng = new LatLng(city.getLatitude(), city .getLongitude());
 
                     // For zooming automatically to the location of the marker
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(latLahore).zoom(12).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(cityLatLng).zoom(12).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
             }
@@ -126,6 +131,12 @@ public class MapFragment extends Fragment {
         return view;
 
     }
+
+    private void sendToLogin(){
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+    }
+
 
     private void getLocationPermissions(){
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};

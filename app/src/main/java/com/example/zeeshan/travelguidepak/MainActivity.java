@@ -54,9 +54,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-            mAuth = FirebaseAuth.getInstance();
-            firebaseFirestore = FirebaseFirestore.getInstance();
+
+        if(!isConnected(this)){
+                logout();
+            }
+
+
 
             mainToolbar = findViewById(R.id.main_toolbar);
 
@@ -80,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
+                        if(e != null){
+                            sendToLogin();
+                        }
+
                         if (!documentSnapshots.isEmpty()) { // para asegurarnos que no haga nada si no hay nada en la base de datos.
 
                             for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
@@ -98,30 +108,10 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+            } else {
+                sendToLogin();
             }
 
-    }
-
-
-
-
-    public AlertDialog.Builder buildDialog(Context c) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
-        builder.setTitle("No Internet Connection Available");
-        builder.setMessage("Please connect to internet to use this application");
-
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                finish();
-            }
-        });
-        builder.setCancelable(false);
-
-        return builder;
     }
 
 
