@@ -84,7 +84,11 @@ public class CitiesRecyclerAdapter extends RecyclerView.Adapter<CitiesRecyclerAd
 
         private void setImage(String imageUrl){
             imageView = mView.findViewById(R.id.city_image);
-            Glide.with(context).load(imageUrl).into(imageView);
+
+            RequestOptions placeholderOptions = new RequestOptions();
+            placeholderOptions.placeholder(R.drawable.defaultplaceimage);
+
+            Glide.with(context).applyDefaultRequestOptions(placeholderOptions).load(imageUrl).into(imageView);
         }
     }
 

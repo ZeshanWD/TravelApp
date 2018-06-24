@@ -119,7 +119,7 @@ public class PlaceCommentAdapter extends RecyclerView.Adapter<PlaceCommentAdapte
 
             // para al cargar no se descuadre la imagen.
             RequestOptions placeholderOptions = new RequestOptions();
-            placeholderOptions.placeholder(R.mipmap.ic_launcher_round);
+            placeholderOptions.placeholder(R.mipmap.default_image);
 
             Glide.with(context).applyDefaultRequestOptions(placeholderOptions).load(image).into(user_image);
         }
