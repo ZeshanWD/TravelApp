@@ -20,7 +20,7 @@ El proyecto consiste en una aplicacion que sirve de guia para los viajeros que q
 
 #### Capturas de la aplicación
 
-![Account Setup](./capturas/1.png)
+![Account Setup](./capturas/1.png =100x20)
 ![Login Image](./capturas/2.png)
 ![Image](./capturas/3.png)
 ![Image](./capturas/4.png)
